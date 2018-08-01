@@ -6,5 +6,9 @@
     "type": "git",
     "url": "?.git"
   },
-  "author": "miguel cerdeira"
+  "author": "miguel cerdeira",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulplog": "^1.0.0"
+  }
 }
