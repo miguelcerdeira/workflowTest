@@ -1,6 +1,12 @@
-var gulp = require('gulp');
-const gulplog = require('gulplog');
+var gulp = require('gulp'),
+    log = require('fancy-log'),
+    coffee = require('gulp-coffee');
 
-gulp.task('log', function(){
-    console.log('Workflows are awsome')
+var coffeeSrcs = 'components/coffee/tagline.coffee';
+
+gulp.task('coffee', function(){
+    gulp.src(coffeeSrcs)
+        .pipe(coffee({ bare: true })
+            .on('error', log))
+        .pipe(gulp.dest('components/scripts'))
 });
