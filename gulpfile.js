@@ -2,6 +2,7 @@ var gulp = require('gulp'),
     log = require('fancy-log'),
     coffee = require('gulp-coffee'),
     browserify = require('gulp-browserify'),
+    compass = require('gulp-compass'),
     concat = require('gulp-concat');
 
 var coffeeSrcs = ['components/coffee/tagline.coffee'];
@@ -11,6 +12,11 @@ var jsSrcs = [
     'components/scripts/tagline.js',
     'components/scripts/template.js'
 ];
+var sassSrcs = ['components/sass/style.scss'];
+
+gulp.task('logit', function(){
+    log('oink')
+});
 
 gulp.task('coffee', function(){
     gulp.src(coffeeSrcs)
@@ -24,4 +30,15 @@ gulp.task('js', function(){
         .pipe(concat('script.js'))
         .pipe(browserify())
         .pipe(gulp.dest('builds/development/js'))
+});
+
+gulp.task('compass', function(){
+    gulp.src(sassSrcs)
+        .pipe(compass({
+            sass: 'components/sass',
+            image: 'builds/development/images',
+            style: 'expanded'
+        })
+        .on('error', log))
+        .pipe(gulp.dest('builds/development/css'))
 });
