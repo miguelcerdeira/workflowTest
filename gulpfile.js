@@ -14,6 +14,8 @@ var jsSrcs = [
     'components/scripts/template.js'
 ];
 var sassSrcs = ['components/sass/style.scss'];
+var htmlSrcs = ['builds/development/*.html'];
+var jsonSrcs = ['builds/development/js/*.json'];
 
 gulp.task('logit', function(){
     log('oink')
@@ -50,6 +52,8 @@ gulp.task('watch', function(){
     gulp.watch(coffeeSrcs,['coffee']);
     gulp.watch(jsSrcs,['js']);
     gulp.watch('components/sass/*.scss',['compass']);
+    gulp.watch(htmlSrcs, ['html'])
+    gulp.watch(jsonSrcs, ['json'])
 });
 
 gulp.task('connect', function(){
@@ -59,4 +63,14 @@ gulp.task('connect', function(){
     }); 
 });
 
-gulp.task('default', ['coffee', 'js', 'compass', 'connect', 'watch']);
+gulp.task('html', function(){
+    gulp.src(htmlSrcs)
+        .pipe(connect.reload())
+});
+
+gulp.task('json', function(){
+    gulp.src(jsonSrcs)
+        .pipe(connect.reload())
+});
+
+gulp.task('default', ['json', 'html','coffee', 'js', 'compass', 'connect', 'watch']);
