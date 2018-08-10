@@ -20,6 +20,7 @@
     "gulp-connect": "^5.5.0",
     "gulp-htmlmin": "^4.0.0",
     "gulp-if": "^2.0.2",
+    "gulp-jsonminify": "^1.1.0",
     "gulp-uglify": "^3.0.1",
     "gulplog": "^1.0.0",
     "jquery": "^3.3.1",
