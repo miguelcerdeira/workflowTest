@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     concat = require('gulp-concat'),
     gulpif = require('gulp-if'),
+    htmlmin = require('gulp-htmlmin'),
     uglify = require('gulp-uglify');
 
 var env,
@@ -78,7 +79,7 @@ gulp.task('watch', function(){
     gulp.watch(coffeeSrcs,['coffee']);
     gulp.watch(jsSrcs,['js']);
     gulp.watch('components/sass/*.scss',['compass']);
-    gulp.watch(htmlSrcs, ['html'])
+    gulp.watch('builds/development/*.html', ['html'])
     gulp.watch(jsonSrcs, ['json'])
 });
 
@@ -90,7 +91,9 @@ gulp.task('connect', function(){
 });
 
 gulp.task('html', function(){
-    gulp.src(htmlSrcs)
+    gulp.src('builds/development/*.html')
+        .pipe(gulpif(env === 'production', htmlmin({collapseWhitespace: true})))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
         .pipe(connect.reload())
 });
 
