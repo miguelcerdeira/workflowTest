@@ -6,16 +6,37 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     concat = require('gulp-concat');
 
-var coffeeSrcs = ['components/coffee/tagline.coffee'];
-var jsSrcs = [
+var env,
+    coffeeSrcs,
+    jsSrcs,
+    sassSrcs,
+    htmlSrcs,
+    jsonSrcs,
+    outputDir,
+    sassStyle;
+    
+env = process.env.NODE_ENV || 'development';
+
+if(env==='development'){
+    outputDir = 'builds/development/';
+    //sassStyle = 'expanded';
+    sassConfigStyle = 'expanded';
+}else{
+    outputDir = 'builds/production/';
+    //sassStyle = 'compressed';
+    sassConfigStyle = 'compressed';
+}
+
+coffeeSrcs = ['components/coffee/tagline.coffee'];
+jsSrcs = [
     'components/scripts/pixgrid.js',
     'components/scripts/rclick.js',
     'components/scripts/tagline.js',
     'components/scripts/template.js'
 ];
-var sassSrcs = ['components/sass/style.scss'];
-var htmlSrcs = ['builds/development/*.html'];
-var jsonSrcs = ['builds/development/js/*.json'];
+sassSrcs = ['components/sass/style.scss'];
+htmlSrcs = [outputDir + '*.html'];
+jsonSrcs = [outputDir + 'js/*.json'];
 
 gulp.task('logit', function(){
     log('oink')
@@ -32,19 +53,21 @@ gulp.task('js', function(){
     gulp.src(jsSrcs)
         .pipe(concat('script.js'))
         .pipe(browserify())
-        .pipe(gulp.dest('builds/development/js'))
+        .pipe(gulp.dest(outputDir + 'js'))
         .pipe(connect.reload())
 });
 
 gulp.task('compass', function(){
     gulp.src(sassSrcs)
         .pipe(compass({
+            config_file: 'components/sass/'+ sassConfigStyle +'-config.rb',
+            css: outputDir + 'css',
             sass: 'components/sass',
-            image: 'builds/development/images',
-            style: 'expanded'
+            image: outputDir + 'images'
+            //style: sassStyle
         })
         .on('error', log))
-        .pipe(gulp.dest('builds/development/css'))
+        .pipe(gulp.dest(outputDir + 'css'))
         .pipe(connect.reload())
 });
 
@@ -58,7 +81,7 @@ gulp.task('watch', function(){
 
 gulp.task('connect', function(){
     connect.server({
-       root: 'builds/development/',
+       root: outputDir,
        livereload: true
     }); 
 });
